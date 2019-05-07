@@ -20,7 +20,8 @@ RUN yum install -y git automake libtool && \
 ENV JAVA_HOME=/etc/alternatives/jre
 RUN git clone --single-branch --branch master https://github.com/pontusvision/libpostal.git
 RUN mkdir /pontus-jpostal-datadir && \
-    cd libpostal && \
+    yum install -y java-1.8.0-openjdk-devel file && \
+    cd  libpostal && \
     ./bootstrap.sh && \
     ./configure --datadir=/pontus-jpostal-datadir && \
     make -j4
@@ -29,14 +30,16 @@ RUN cd libpostal && \
     make install
 
 
-RUN git clone --single-branch --branch master https://github.com/pontusvision/pontus-jpostal.git
+RUN git clone --depth=1  --single-branch --branch master https://github.com/pontusvision/pontus-jpostal.git
 RUN cd pontus-jpostal && \
-    yum install -y java-1.8.0-openjdk-devel file && \
     export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0 && \
     sed -i 's/PKG_CHECK_MODULES/#PKG_CHECK_MODULES/g' configure.ac && \
     sed -i 's#/c/work/pontus-git/pontusvision-x/tech#/#g ; s#win-amd64#linux-x86_64#g' src/main/c/Makefile.am && \
+    rm -f $(pwd)/src/main/resources/lib/linux-x86_64/* && \
+    cp -af /usr/local/lib/libpostal.so*  $(pwd)/src/main/resources/lib/linux-x86_64/ && \
     ./bootstrap.sh && \
     ./configure --libdir=$(pwd)/src/main/resources/lib/linux-x86_64   --disable-static --enable-shared && \
+    make clean install && \
     ./gradlew install
 
 RUN yum -y install maven
@@ -45,7 +48,7 @@ RUN git clone --depth 1 --single-branch --branch master https://github.com/pontu
 RUN cd pontus-natty && \
     mvn clean install package -DskipTests
 
-RUN git clone  --depth 1 --single-branch --branch master https://github.com/pontusvision/pontus-gdpr-graph.git
+RUN git  clone  --depth 1 --single-branch --branch master https://github.com/pontusvision/pontus-gdpr-graph.git
 RUN cd pontus-gdpr-graph && \
     mvn clean package install -DskipTests
 
@@ -65,3 +68,12 @@ RUN apk add -q --no-cache \
       zip 
 
 COPY --from=builder /root/.m2/ /root/.m2/
+RUN mkdir -p /opt/pontus-graphdb/graphdb-current/lib 
+RUN mkdir -p /opt/pontus-graphdb/graphdb-current/bin 
+RUN mkdir -p /opt/pontus-graphdb/graphdb-current/conf 
+COPY --from=builder  /pontus-gdpr-graph/conf /opt/pontus-graphdb/graphdb-current/conf
+COPY --from=builder  /pontus-gdpr-graph/bin /opt/pontus-graphdb/graphdb-current/bin
+
+COPY --from=builder /pontus-jpostal-datadir /opt/pontus-graphdb/graphdb-current/datadir
+COPY log4j.properties /opt/pontus-graphdb/graphdb-current/lib
+
