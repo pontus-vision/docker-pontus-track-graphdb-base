@@ -21,7 +21,13 @@ PVGDPR_OPTS=" \
  -Dldap.domain.root=CN=Users,DC=pontusvision,DC=com  \
  -Dldap.user.group=CN=Administrators,CN=Builtin,DC=pontusvision,DC=com  \
  -Dldap.admin.user=Administrator  \
- -Dldap.admin.user.pwd=pa55wordpa55wordPASSWD999"
+ -Dldap.admin.user.pwd=pa55wordpa55wordPASSWD999 \
+ -Dcom.sun.management.jmxremote=true \
+ -Dcom.sun.management.jmxremote.local.only=false \
+ -Dcom.sun.management.jmxremote.authenticate=false \
+ -Dcom.sun.management.jmxremote.ssl=false \
+ -Dcom.sun.management.jmxremote.port=9999 \
+ -Dcom.sun.management.jmxremote.rmi.port=9998"
 
 CLASS=com.pontusvision.gdpr.App
 #CLASS=uk.gov.cdp.pole.bootstrap.Bootstrap
