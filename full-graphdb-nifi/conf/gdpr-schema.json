@@ -262,107 +262,107 @@
     {
       "name": "Location.Address.parser.category",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Location.Address.parser.city",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Location.Address.parser.city_district",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Location.Address.parser.country",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Location.Address.parser.country_region",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Location.Address.parser.entrance",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Location.Address.parser.house",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Location.Address.parser.house_number",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Location.Address.parser.island",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Location.Address.parser.level",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Location.Address.parser.near",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Location.Address.parser.po_box",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Location.Address.parser.postcode",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Location.Address.parser.road",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Location.Address.parser.staircase",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Location.Address.parser.state",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Location.Address.parser.state_district",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Location.Address.parser.suburb",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Location.Address.parser.unit",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Location.Address.parser.world_region",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Metadata.Controller",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Metadata.Create_Date",
@@ -377,7 +377,7 @@
     {
       "name": "Metadata.Lineage",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Metadata.Lineage_Location_Tag",
@@ -397,7 +397,7 @@
     {
       "name": "Metadata.Processor",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Metadata.Redaction",
@@ -407,7 +407,7 @@
     {
       "name": "Metadata.Status",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Metadata.Type",
@@ -623,12 +623,12 @@
     {
       "name": "Object.AWS_Instance.ProductCodeIDs",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Object.AWS_Instance.ProductCodeTypes",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Object.AWS_Instance.Public_Dns_Name",
@@ -638,7 +638,7 @@
     {
       "name": "Object.AWS_Instance.Tags",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Object.AWS_Network_Interface.AttachTime",
@@ -668,7 +668,7 @@
     {
       "name": "Object.AWS_Network_Interface.PrivateIpAddresses",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Object.AWS_Security_Group.GroupName",
@@ -683,12 +683,12 @@
     {
       "name": "Object.AWS_Security_Group.Ip_Perms_Egress_IpRanges",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Object.AWS_Security_Group.Ip_Perms_Ingress_IpRanges",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Object.AWS_VPC.Id",
@@ -908,7 +908,7 @@
     {
       "name": "Object.Email_Address.Email",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Object.Form.Metadata_Create_Date",
@@ -1068,7 +1068,7 @@
     {
       "name": "Object.Notification_Templates.Types",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Object.Notification_Templates.URL",
@@ -1293,7 +1293,7 @@
     {
       "name": "Person.Employee.Nationality",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Person.Employee.Place_Of_Birth",
@@ -1358,17 +1358,17 @@
     {
       "name": "Person.Nationality",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Person.Organisation.Email",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Person.Organisation.Fax",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Person.Organisation.Name",
@@ -1378,7 +1378,7 @@
     {
       "name": "Person.Organisation.Phone",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Person.Organisation.Registration_Number",
@@ -1388,7 +1388,7 @@
     {
       "name": "Person.Organisation.Sector",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Person.Organisation.Short_Name",
@@ -1403,22 +1403,22 @@
     {
       "name": "Person.Organisation.Type",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Person.Organisation.URL",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Person.Organisation.orgCountrySet",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Person.Organisation.Department",
       "dataType": "String",
-      "cardinality": "SET"
+      "cardinality": "SINGLE"
     },
     {
       "name": "Person.Place_Of_Birth",
