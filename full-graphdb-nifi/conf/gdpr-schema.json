@@ -896,12 +896,12 @@
     },
     {
       "name": "Object.Phone_Number.Numbers_Only",
-      "dataType": "Integer",
+      "dataType": "String",
       "cardinality": "SINGLE"
     },
     {
       "name": "Object.Phone_Number.Last_7_Digits",
-      "dataType": "Integer",
+      "dataType": "String",
       "cardinality": "SINGLE"
     },
 
@@ -1613,7 +1613,7 @@
       "name": "Event.Training.Awareness_Campaign",
       "multiplicity": "MULTI",
       "unidirected": false
-    }, 
+    },
     {
       "name": "Event.Training.Person",
       "multiplicity": "MULTI",
