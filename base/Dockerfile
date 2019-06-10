@@ -48,8 +48,8 @@ RUN git clone --depth 1 --single-branch --branch master https://github.com/pontu
 RUN cd pontus-natty && \
     mvn clean install package -DskipTests
 
-RUN git  clone  --depth 1 --single-branch --branch master https://github.com/pontusvision/pontus-gdpr-graph.git
-RUN cd pontus-gdpr-graph && \
+RUN git clone  --depth 1 --single-branch --branch master https://github.com/pontusvision/pontus-gdpr-graph.git && \
+    cd pontus-gdpr-graph && \
     mvn clean package install -DskipTests
 
 RUN cd /root/.m2/repository && for i in *; do if [[ "com" == $i || "pv-gdpr" == $i ]]; then echo skip ; else rm -r $i; fi; done    

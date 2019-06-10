@@ -2098,7 +2098,7 @@
         },
         "Object.Data_Source.Name": {
           "mapping": "STRING"
-        }
+        },
 		"Object.Data_Source.Form_Id": {
           "mapping": "STRING"
         },
