@@ -3,7 +3,9 @@ PVGDPR_CLASSPATH=/opt/pontus/pontus-hbase/current/conf
 #PVGDPR_OPTS="-Djava.security.auth.login.config=/opt/graphdb/current/conf/jaas.conf -Dsun.security.krb5.debug=true"
 #PVGDPR_OPTS="-Djava.security.auth.login.config=/opt/pontus-graphdb/graphdb-current//conf/jaas.conf"
 PVGDPR_OPTS=" \
+ -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5009 \
  -Dldap.user.creation.freeipa.mode=false \
+ -Dindex.elastic.use_params=true \
  -Dshadow.user.keystore.location=/etc/pki/java/shadow.jks \
  -Dshadow.user.keystore.pwd=pa55word \
  -Dshadow.user.key.pwd=pa55word \
