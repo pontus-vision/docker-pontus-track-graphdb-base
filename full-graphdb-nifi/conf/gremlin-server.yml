@@ -3,7 +3,7 @@ host: 0.0.0.0
 port: 8182
 scriptEvaluationTimeout: 30000
 threadPoolWorker: 3
-gremlinPool: 2
+gremlinPool: 3
 
 channelizer: org.apache.tinkerpop.gremlin.server.channel.WsAndHttpChannelizer
 #channelizer: com.pontusvision.gdpr.WsAndHttpJWTChannelizer

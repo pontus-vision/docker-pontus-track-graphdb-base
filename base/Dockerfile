@@ -48,7 +48,7 @@ RUN git clone --depth 1 --single-branch --branch master https://github.com/pontu
 RUN cd pontus-natty && \
     mvn clean install package -DskipTests
 
-RUN git clone --depth 1 --single-branch  --branch master https://github.com/pontusvision/pontus-gdpr-graph.git && \
+RUN git clone  --depth 1 --single-branch  --branch master https://github.com/pontusvision/pontus-gdpr-graph.git && \
      cd pontus-gdpr-graph && \
     mvn clean package install -DskipTests
 
