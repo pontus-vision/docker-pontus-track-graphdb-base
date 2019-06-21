@@ -1091,7 +1091,7 @@ class Schema {
 }
 
 def renderReportInText(long pg_id, String reportType = 'SAR Read', GraphTraversalSource g = g) {
-    def template = g.V().has('Object.Notification_Templates.Types', eq('Person'))
+    def template = g.V().has('Object.Notification_Templates.Types', eq('Person.Natural'))
             .has('Object.Notification_Templates.Label', eq(reportType))
             .values('Object.Notification_Templates.Text').next() as String
     if (template) {
@@ -1310,7 +1310,7 @@ def getMetadataTypes(int level) {
     def metadataTypes = [
             'Event.Group_Ingestion'
             , 'Event.Ingestion'
-            , 'Person'
+            , 'Person.Natural'
             , 'Object.Email_Address'
             , 'Object.Credential'
             , 'Event.Form_Ingestion'
@@ -1341,9 +1341,9 @@ def getMetadataTypes(int level) {
 
 def getLevel(String label) {
     def levels = [
-            'Event.Group_Ingestion',
+            'Event Group_Ingestion',
             'Event Ingestion',
-            'Person',
+            'Person Natural',
             'Object Email Address',
             'Object Credential',
             'Event Form Ingestion',
