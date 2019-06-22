@@ -23,12 +23,13 @@ RUN mkdir -p /opt/pontus-graphdb/graphdb-current/lib && \
 COPY --from=builder --chown=pontus /opt/pontus-graphdb/graphdb-current/datadir /opt/pontus-graphdb/graphdb-current/datadir
 COPY --from=builder --chown=pontus /root/.m2/repository/pv-gdpr/pontus-gdpr-graph/1.2.0/pontus-gdpr-graph-1.2.0.jar /opt/pontus-graphdb/graphdb-current/lib/
 COPY --from=builder --chown=pontus /opt/pontus-graphdb/graphdb-current/bin /opt/pontus-graphdb/graphdb-current/bin
+COPY --from=builder --chown=pontus /opt/pontus-graphdb/graphdb-current/conf /opt/pontus-graphdb/graphdb-current/conf
 COPY --from=builder --chown=pontus /opt/pontus-graphdb/graphdb-current/lib/log4j.properties /opt/pontus-graphdb/graphdb-current/lib/
 
 RUN ln -s /tmp/libpostal.so /tmp/libpostal.so.1 || true && \
     ln -s /tmp/libjpostal_parser.so  /tmp/libjpostal_parser.so.1 || true 
-COPY bin /opt/pontus-graphdb/graphdb-current/bin
-COPY conf /opt/pontus-graphdb/graphdb-current/conf
+#COPY bin /opt/pontus-graphdb/graphdb-current/bin
+#COPY conf /opt/pontus-graphdb/graphdb-current/conf
 USER pontus
 WORKDIR /opt/pontus-graphdb/graphdb-current
 CMD LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tmp /opt/pontus-graphdb/graphdb-current/bin/pv-gdpr-graphdb.sh /opt/pontus-graphdb/graphdb-current/conf/gremlin-server-nifi.yml
