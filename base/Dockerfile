@@ -75,5 +75,5 @@ RUN mkdir -p /opt/pontus-graphdb/graphdb-current/conf
 COPY --from=pontusvisiongdpr/pontus-jpostal-lib /pontus-jpostal-datadir /opt/pontus-graphdb/graphdb-current/datadir
 COPY --from=pontusvisiongdpr/pontus-graphdb-conf  /pontus-gdpr-graph/bin /opt/pontus-graphdb/graphdb-current/bin
 COPY log4j.properties /opt/pontus-graphdb/graphdb-current/lib
-COPY --from=pontusvisiongdpr/pontus-graphdb-conf  /pontus-gdpr-graph/conf /opt/pontus-graphdb/graphdb-current/conf
+COPY --from=pontusvisiongdpr/pontus-graphdb-conf    /pontus-gdpr-graph/conf /opt/pontus-graphdb/graphdb-current/conf
 
