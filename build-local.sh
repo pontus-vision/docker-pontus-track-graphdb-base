@@ -6,7 +6,7 @@ cd $DIR/base
 docker build --rm . -t pontusvisiongdpr/pontus-track-graphdb-base
 
 cd $DIR/full-graphdb-nifi
-docker build --rm . -t pontusvisiongdpr/pontus-track-graphdb-nifi
+docker build  --rm . -t pontusvisiongdpr/pontus-track-graphdb-nifi
 
 docker push pontusvisiongdpr/pontus-track-graphdb-nifi
 docker push pontusvisiongdpr/pontus-track-graphdb-base
