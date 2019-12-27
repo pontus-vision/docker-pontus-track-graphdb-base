@@ -1,19 +1,13 @@
 FROM pontusvisiongdpr/pontus-track-graphdb-base as builder
 
 FROM openjdk:8-jre-alpine as final
-
-# needed for fonts:
-ENV LANG en_GB.UTF-8
 RUN apk upgrade -q --no-cache && \
     apk add -q --no-cache \
       curl \
       bash \
       gettext \
       unzip \
-      zip \ 
-      ttf-dejavu   # fonts...
-
-
+      zip  
 
 #RUN apt-get upgrade -q --no-cache 
 #RUN apt-get add -q --no-cache \
@@ -34,11 +28,8 @@ COPY --from=builder --chown=pontus /opt/pontus-graphdb/graphdb-current/lib/log4j
 COPY  --from=pontusvisiongdpr/pontus-graphdb-conf    /pontus-gdpr-graph/conf /opt/pontus-graphdb/graphdb-current/conf
 
 RUN ln -s /tmp/libpostal.so /tmp/libpostal.so.1 || true && \
-    ln -s /tmp/libjpostal_parser.so  /tmp/libjpostal_parser.so.1 || true  
-
-RUN rm /opt/pontus-graphdb/graphdb-current/conf/i18n*
+    ln -s /tmp/libjpostal_parser.so  /tmp/libjpostal_parser.so.1 || true 
 #COPY bin /opt/pontus-graphdb/graphdb-current/bin
-
 #COPY conf /opt/pontus-graphdb/graphdb-current/conf
 USER pontus
 WORKDIR /opt/pontus-graphdb/graphdb-current
