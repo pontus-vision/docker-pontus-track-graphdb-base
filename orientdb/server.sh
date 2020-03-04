@@ -122,6 +122,12 @@ exec "$JAVA" $JAVA_OPTS \
     $DEBUG_OPTS \
     -Djava.util.logging.manager=com.orientechnologies.common.log.ShutdownLogManager \
     -Djava.util.logging.config.file="$ORIENTDB_LOG_CONF" \
+    -Dtx.commit.synch=true \
+    -Dtx.log.synch=true \
+    -Dtx.log.fileType=mmap \
+    -Dindex.txMode=FULL \
+    -DnonTX.recordUpdate.synch=true \
+    -Denvironment.dumpCfgAtStartup=false \
     -Dorientdb.config.file="$CONFIG_FILE" \
     -Dorientdb.www.path="$ORIENTDB_WWW_PATH" \
     -Dorientdb.build.number="develop@re3b3314d5494363f823331471c31461678d1b734; 2019-10-28 11:33:25+0000" \

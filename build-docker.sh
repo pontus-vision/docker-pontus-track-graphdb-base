@@ -6,6 +6,12 @@ DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 cd $DIR/orientdb
 docker build  --rm . -t pontusvisiongdpr/pontus-track-graphdb-odb
 
+cd $DIR/orientdb-pt
+docker build  --rm . -t pontusvisiongdpr/pontus-track-graphdb-odb-pt
+
+docker push pontusvisiongdpr/pontus-track-graphdb-odb-pt
+docker push pontusvisiongdpr/pontus-track-graphdb-odb
+
 cd $DIR/base
 docker build --rm . -t pontusvisiongdpr/pontus-track-graphdb-base
 
