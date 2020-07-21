@@ -1,8 +1,8 @@
 ############################################################
 # Dockerfile to run an OrientDB (Graph) Container
 ############################################################
-
-FROM pontusvisiongdpr/pontus-track-graphdb-odb
+ARG TAG=exp-2020-06-21
+FROM pontusvisiongdpr/pontus-track-graphdb-odb:${TAG}
 
 MAINTAINER Pontus Vision LTD (info@pontusvision.com)
 

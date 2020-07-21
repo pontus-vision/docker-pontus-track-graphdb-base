@@ -2,7 +2,7 @@
 # Dockerfile to run an OrientDB (Graph) Container
 ############################################################
 
-FROM openjdk:8-jdk-alpine as BUILDER
+FROM openjdk:8-jdk-slim-buster as BUILDER
 
 MAINTAINER OrientDB LTD (info@orientdb.com)
  
@@ -10,15 +10,16 @@ MAINTAINER OrientDB LTD (info@orientdb.com)
 #   docker build -t mine --build-arg ORIENTDB_DOWNLOAD_SERVER=https://repo1.maven.org/maven2/com/orientechnologies/ .
 ARG ORIENTDB_DOWNLOAD_SERVER
 
-ENV ORIENTDB_VERSION 3.1.0-beta1
-ENV ORIENTDB_DOWNLOAD_MD5 59bf93992576089cbfca66ba2abfc088
-ENV ORIENTDB_DOWNLOAD_SHA1 3b3ea0a0a45df96896fb0cd974b729ee6e7d34bd
+ENV ORIENTDB_VERSION 3.1.0
+ENV ORIENTDB_DOWNLOAD_MD5 7c233ea871147154ac1e5b265711a9a3
+ENV ORIENTDB_DOWNLOAD_SHA1 f609f711c2b1ce5d702006a408e4210a9644e7f8
 
 ENV ORIENTDB_DOWNLOAD_URL ${ORIENTDB_DOWNLOAD_SERVER:-https://central.maven.org/maven2/com/orientechnologies/orientdb-tp3/$ORIENTDB_VERSION/orientdb-tp3-$ORIENTDB_VERSION.tar.gz}
 ENV ORIENTDB_DOWNLOAD_URL ${ORIENTDB_DOWNLOAD_SERVER:-https://repo1.maven.org/maven2/com/orientechnologies/orientdb-tp3/$ORIENTDB_VERSION/orientdb-tp3-$ORIENTDB_VERSION.tar.gz}
 
-RUN apk add --update tar curl bash \
-    && rm -rf /var/cache/apk/*
+RUN apt update -y && \
+    apt install -y tar curl bash wget && \
+    apt autoremove -y
 
 #download distribution tar, untar and DON'T delete databases (tp3 endopoint won't works if db isn't present)
 RUN mkdir /orientdb && \
@@ -29,14 +30,18 @@ RUN mkdir /orientdb && \
   && rm orientdb-tp3-$ORIENTDB_VERSION.tar.gz \
   && rm -rf /orientdb/databases/*
 
-FROM openjdk:8-jdk-alpine
+FROM openjdk:8-jdk-slim-buster
 
 
-RUN apk add --update tar curl bash && \
-    rm -rf /var/cache/apk/* && \
-    addgroup -S -g 1000 orientdb && \
-    adduser -S -u 1000 -g orientdb orientdb && \
+RUN apt update -y && \
+    apt install -y tar curl bash s3fs && \
+    apt autoremove -y && \
+    groupadd --system -g 1000 orientdb && \
+    sed -i 's/#user_allow_other/user_allow_other/g' /etc/fuse.conf && \
+    useradd -u 1000 -g orientdb orientdb -d /orientdb && \
     mkdir /orientdb /orientdb/bin /orientdb/lib /orientdb/log /orientdb/databases && \
+    echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY | sed -e 's/ //g' > /orientdb/.passwd-s3fs && \
+    chmod 400 /orientdb/.passwd-s3fs && \
     chown -R 1000:1000 /orientdb
 
 USER 1000
@@ -76,6 +81,17 @@ EXPOSE 2480
 #Gremlin server
 EXPOSE 8182
 
+ENV S3_BUCKET=orientdb-test
+ENV MOUNT_POINT=/orientdb/databases
+ENV REGION=eu-west-2
+#ENV IAM_ROLE=orientdb-role
+ENV IAM_ROLE=auto
+ENV S3_ACL=private
+
+USER root
+CMD /usr/bin/s3fs ${S3_BUCKET} ${MOUNT_POINT} -o uid=1000,gid=1000,use_cache=/tmp,url=https://s3.amazonaws.com,endpoint=${REGION},iam_role=${IAM_ROLE},allow_other,nosuid,nonempty,nodev,default_acl=${S3_ACL},retries=5 -d
+
+USER 1000
 # Default command start the server
 CMD ["server.sh"]
 
