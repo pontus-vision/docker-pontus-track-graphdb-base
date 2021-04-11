@@ -2,7 +2,7 @@
 # Dockerfile to run an OrientDB (Graph) Container
 ############################################################
 ARG TAG=latest
-FROM pontusvisiongdpr/pontus-track-graphdb-odb:${TAG}
+FROM pontusvisiongdpr/pontus-track-graphdb-odb:1.13.2
 
 MAINTAINER Pontus Vision LTD (info@pontusvision.com)
 

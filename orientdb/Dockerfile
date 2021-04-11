@@ -52,7 +52,7 @@ COPY --chown=1000:1000   --from=BUILDER /orientdb/config/*     /orientdb/config/
 COPY --chown=1000:1000   --from=BUILDER /orientdb/plugins/*     /orientdb/plugins/
 
 #overrides internal gremlin-server to set binding to 0.0.0.0 instead of localhost
-COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-jpostal-lib:latest /pontus-jpostal-datadir /opt/pontus-graphdb/graphdb-current/datadir
+COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-jpostal-lib:1.13.2 /pontus-jpostal-datadir /opt/pontus-graphdb/graphdb-current/datadir
 
 COPY --chown=1000:1000 server.sh /orientdb/bin
 RUN chmod 755 /orientdb/bin/server.sh
