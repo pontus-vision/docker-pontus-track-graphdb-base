@@ -85,6 +85,8 @@ if [ -f "$ORIENTDB_PID" ]; then
     rm "$ORIENTDB_PID"
 fi
 
+ cat $ORIENTDB_HOME/config/demodb.properties.template | envsubst > $ORIENTDB_HOME/config/demodb.properties
+
 # DEBUG OPTS, SIMPLY USE 'server.sh debug'
 DEBUG_OPTS=""
 ARGS='';
@@ -114,6 +116,8 @@ fi
 
 echo $$ > $ORIENTDB_PID
 #    -cp "$ORIENTDB_HOME/lib/pontus-odb-graph-2.0.0.jar:$ORIENTDB_HOME/lib/*:$ORIENTDB_HOME/plugins/*" \
+
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/tmp
 
 exec "$JAVA" $JAVA_OPTS \
     $ORIENTDB_OPTS_MEMORY \

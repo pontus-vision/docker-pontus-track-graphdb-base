@@ -40,6 +40,8 @@ ENV LAMBDA_TASK_ROOT=${DOLLAR}{LAMBDA_TASK_ROOT}
 
 #COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-lib:${TAG} /root/.m2/repository/pv-gdpr/pontus-odb-graph/2.0.0/pontus-odb-graph-2.0.0.jar  ${DOLLAR}{LAMBDA_TASK_ROOT}/lib/
 
+ENV ORIENTDB_HOME=/orientdb/
+
 COPY --chown=1000:1000 --from=BUILDER /orientdb/plugins/*  ${DOLLAR}{LAMBDA_TASK_ROOT}/lib/
 
 
@@ -64,6 +66,19 @@ COPY --chown=1000:1000   --from=BUILDER /orientdb/bin/*     /orientdb/bin/
 COPY --chown=1000:1000   --from=BUILDER /orientdb/config/*     /orientdb/config/
 COPY --chown=1000:1000   --from=BUILDER /orientdb/plugins/*     /orientdb/plugins/
 
+
+USER root
+RUN mkdir /orientdb/backup && \
+    mkdir /orientdb/databases && \
+    chown 1000:1000 /orientdb/backup && \
+    chown 1000:1000 /orientdb/databases  && \
+    chmod 777 /orientdb/databases  && \
+    chmod 777 /orientdb/backup
+
+VOLUME ["/orientdb/backup", "/orientdb/databases"]
+
+USER 1000
+
 #overrides internal gremlin-server to set binding to 0.0.0.0 instead of localhost
 COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-jpostal-lib:${TAG} /pontus-jpostal-datadir /opt/pontus-graphdb/graphdb-current/datadir
 
@@ -81,9 +96,6 @@ RUN ln -s /tmp/libpostal.so /tmp/libpostal.so.1 || true && \
 
 ENV PATH /orientdb/bin:${DOLLAR}PATH
 ENV LD_LIBRARY_PATH=${DOLLAR}LD_LIBRARY_PATH:/tmp
-
-VOLUME ["/orientdb/backup", "/orientdb/databases"]
-
 COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-lib:${TAG}    /pontus-odb-graph/ ${DOLLAR}{LAMBDA_TASK_ROOT}/
 
 # Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
