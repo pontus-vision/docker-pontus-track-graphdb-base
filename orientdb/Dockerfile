@@ -34,7 +34,7 @@ FROM openjdk:8-jdk-slim-buster
 
 
 RUN apt update -y && \
-    apt install -y tar curl bash s3fs && \
+    apt install -y tar curl bash gettext-base && \
     apt autoremove -y && \
     groupadd --system -g 1000 orientdb && \
     useradd -u 1000 -g orientdb orientdb -d /orientdb && \
@@ -54,7 +54,7 @@ COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-jpostal-lib:2021-05-23-21-
 COPY --chown=1000:1000 server.sh /orientdb/bin
 RUN chmod 755 /orientdb/bin/server.sh
 
-COPY --chown=1000:1000  demodb.properties gremlin-server.yaml security.json /orientdb/config/
+COPY --chown=1000:1000  demodb.properties.template gremlin-server.yaml security.json /orientdb/config/
 
 COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-lib:2021-05-23-21-38 /root/.m2/repository/pv-gdpr/pontus-odb-graph/2.0.0/pontus-odb-graph-2.0.0.jar /orientdb/lib/
 
@@ -82,5 +82,5 @@ EXPOSE 8182
 
 USER 1000
 # Default command start the server
-CMD ["server.sh"]
+CMD ["/orientdb/bin/server.sh"]
 
