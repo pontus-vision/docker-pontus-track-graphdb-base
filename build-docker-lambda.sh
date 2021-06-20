@@ -19,24 +19,21 @@ docker build --rm . -t pontusvisiongdpr/pontus-track-graphdb-base:${TAG}
 
 cd $DIR/orientdb-lambda
 cat $DIR/orientdb-lambda/Dockerfile.template | envsubst > $DIR/orientdb-lambda/Dockerfile
-docker build  --rm . -t pontusvisiongdpr/pontus-track-graphdb-odb-lambda:${TAG}
 
-#cd $DIR/full-graphdb-nifi
-#docker build  --rm . -t pontusvisiongdpr/pontus-track-graphdb-nifi:${TAG}
+if [[ -z $FORMITI_DEV_ACCOUNT ]]; then
+  docker build  --rm . -t pontusvisiongdpr/pontus-track-graphdb-odb-lambda:${TAG}
+  docker push pontusvisiongdpr/pontus-track-graphdb-odb-lambda:${TAG}
+else 
+  if [[ $(aws --version 2>&1 ) == "aws-cli/1"* ]] ; then
+    $(aws ecr get-login --no-include-email --region eu-west-2)
+  else
+    aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${FORMITI_DEV_ACCOUNT}.dkr.ecr.eu-west-2.amazonaws.com
+  fi
 
-#cd $DIR/full-graphdb-nifi-pt
-#docker build  --rm . -t pontusvisiongdpr/pontus-track-graphdb-nifi-pt:${TAG}
+  docker build  --rm . -t pontus-track-graphdb-odb-lambda:${TAG}
+  docker tag pontus-track-graphdb-odb-lambda:${TAG} ${FORMITI_DEV_ACCOUNT}.dkr.ecr.eu-west-2.amazonaws.com/pontus-track-graphdb-odb-lambda:${TAG}  
+  docker push ${FORMITI_DEV_ACCOUNT}.dkr.ecr.eu-west-2.amazonaws.com/pontus-track-graphdb-odb-lambda:${TAG}
 
-#docker push pontusvisiongdpr/pontus-track-graphdb-base:${TAG}
-#docker push pontusvisiongdpr/pontus-track-graphdb-odb:${TAG}
-#docker push pontusvisiongdpr/pontus-track-graphdb-odb-pt:${TAG}
-docker push pontusvisiongdpr/pontus-track-graphdb-odb-lambda:${TAG}
-
-#docker push pontusvisiongdpr/pontus-track-graphdb-nifi-pt:${TAG}
-#docker push pontusvisiongdpr/pontus-track-graphdb-nifi:${TAG}
-
-#cd $DIR/full-graphdb-gui
-#docker build --rm . -t pontusvisiongdpr/pontus-track-graphdb-gui
-#docker push pontusvisiongdpr/pontus-track-graphdb-gui
+fi
 
 

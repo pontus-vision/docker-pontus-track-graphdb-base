@@ -49,16 +49,17 @@ COPY --chown=1000:1000   --from=BUILDER /orientdb/config/*     /orientdb/config/
 COPY --chown=1000:1000   --from=BUILDER /orientdb/plugins/*     /orientdb/plugins/
 
 #overrides internal gremlin-server to set binding to 0.0.0.0 instead of localhost
-COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-jpostal-lib:2021-05-23-21-38 /pontus-jpostal-datadir /opt/pontus-graphdb/graphdb-current/datadir
+COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-jpostal-lib:1.13.2 /pontus-jpostal-datadir /opt/pontus-graphdb/graphdb-current/datadir
 
 COPY --chown=1000:1000 server.sh /orientdb/bin
 RUN chmod 755 /orientdb/bin/server.sh
 
 COPY --chown=1000:1000  demodb.properties.template gremlin-server.yaml security.json /orientdb/config/
 
-COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-lib:2021-05-23-21-38 /root/.m2/repository/pv-gdpr/pontus-odb-graph/2.0.0/pontus-odb-graph-2.0.0.jar /orientdb/lib/
+COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-lib:1.13.2 /root/.m2/repository/pv-gdpr/pontus-odb-graph/2.0.0/pontus-odb-graph-2.0.0.jar /orientdb/lib/
 
-COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-conf:2021-05-23-21-38 /pontus-odb-graph/conf /orientdb/conf
+COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-conf:1.13.2 /pontus-odb-graph/conf /orientdb/conf
+COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-conf:1.13.2 /pontus-odb-graph/j2 /orientdb/j2
 
 RUN ln -s /tmp/libpostal.so /tmp/libpostal.so.1 || true && \
     ln -s /tmp/libjpostal_parser.so  /tmp/libjpostal_parser.so.1 || true

@@ -28,7 +28,8 @@ RUN mkdir /orientdb && \
   && echo "${DOLLAR}ORIENTDB_DOWNLOAD_SHA1 *orientdb-tp3-${DOLLAR}ORIENTDB_VERSION.tar.gz" | sha1sum -c - \
   && tar -xvzf orientdb-tp3-${DOLLAR}ORIENTDB_VERSION.tar.gz -C /orientdb --strip-components=1 \
   && rm orientdb-tp3-${DOLLAR}ORIENTDB_VERSION.tar.gz \
-  && rm -rf /orientdb/databases/*
+  && rm -rf /orientdb/databases/* \
+  && ln -s /mnt/orientdb /orientdb/databases
 
 #FROM openjdk:8-jdk-slim-buster
 FROM public.ecr.aws/lambda/java:8 as FINAL

@@ -38,7 +38,7 @@ ENV LAMBDA_TASK_ROOT=${LAMBDA_TASK_ROOT}
 
 # Copy function code and runtime dependencies from Gradle layout
 
-#COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-lib:2021-05-23-21-38 /root/.m2/repository/pv-gdpr/pontus-odb-graph/2.0.0/pontus-odb-graph-2.0.0.jar  ${LAMBDA_TASK_ROOT}/lib/
+#COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-lib:1.13.2 /root/.m2/repository/pv-gdpr/pontus-odb-graph/2.0.0/pontus-odb-graph-2.0.0.jar  ${LAMBDA_TASK_ROOT}/lib/
 
 ENV ORIENTDB_HOME=/orientdb/
 
@@ -80,23 +80,23 @@ VOLUME ["/orientdb/backup", "/orientdb/databases"]
 USER 1000
 
 #overrides internal gremlin-server to set binding to 0.0.0.0 instead of localhost
-COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-jpostal-lib:2021-05-23-21-38 /pontus-jpostal-datadir /opt/pontus-graphdb/graphdb-current/datadir
+COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-jpostal-lib:1.13.2 /pontus-jpostal-datadir /opt/pontus-graphdb/graphdb-current/datadir
 
 COPY --chown=1000:1000 server.sh /orientdb/bin
 RUN chmod 755 /orientdb/bin/server.sh
 
 COPY --chown=1000:1000  demodb.properties gremlin-server.yaml security.json /orientdb/config/
 
-COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-lib:2021-05-23-21-38 /root/.m2/repository/pv-gdpr/pontus-odb-graph/2.0.0/pontus-odb-graph-2.0.0.jar /orientdb/lib/
+COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-lib:1.13.2 /root/.m2/repository/pv-gdpr/pontus-odb-graph/2.0.0/pontus-odb-graph-2.0.0.jar /orientdb/lib/
 
-COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-conf:2021-05-23-21-38 /pontus-odb-graph/conf /orientdb/conf
+COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-conf:1.13.2 /pontus-odb-graph/conf /orientdb/conf
 
 RUN ln -s /tmp/libpostal.so /tmp/libpostal.so.1 || true && \
     ln -s /tmp/libjpostal_parser.so  /tmp/libjpostal_parser.so.1 || true
 
 ENV PATH /orientdb/bin:$PATH
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tmp
-COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-lib:2021-05-23-21-38    /pontus-odb-graph/ ${LAMBDA_TASK_ROOT}/
+COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-lib:1.13.2    /pontus-odb-graph/ ${LAMBDA_TASK_ROOT}/
 
 # Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
 CMD [ "com.pontusvision.gdpr.LambdaHandler::handleRequest" ]
