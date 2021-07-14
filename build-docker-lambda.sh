@@ -19,6 +19,8 @@ docker build --rm . -t pontusvisiongdpr/pontus-track-graphdb-base:${TAG}
 
 cd $DIR/orientdb-lambda
 cat $DIR/orientdb-lambda/Dockerfile.template | envsubst > $DIR/orientdb-lambda/Dockerfile
+#cat $DIR/orientdb-lambda/Dockerfile.template | envsubst > $DIR/orientdb-lambda/Dockerfile
+export ORIENTDB_PASSWORD=admin
 
 if [[ -z $FORMITI_DEV_ACCOUNT ]]; then
   docker build  --rm . -t pontusvisiongdpr/pontus-track-graphdb-odb-lambda:${TAG}
@@ -31,8 +33,9 @@ else
   fi
 
   docker build  --rm . -t pontus-track-graphdb-odb-lambda:${TAG}
-  docker tag pontus-track-graphdb-odb-lambda:${TAG} ${FORMITI_DEV_ACCOUNT}.dkr.ecr.eu-west-2.amazonaws.com/pontus-track-graphdb-odb-lambda:${TAG}  
-  docker push ${FORMITI_DEV_ACCOUNT}.dkr.ecr.eu-west-2.amazonaws.com/pontus-track-graphdb-odb-lambda:${TAG}
+  TIMESTAMP=$(date +%y%m%d_%H%M%S)
+  docker tag pontus-track-graphdb-odb-lambda:${TAG} ${FORMITI_DEV_ACCOUNT}.dkr.ecr.eu-west-2.amazonaws.com/pontus-track-graphdb-odb-lambda:${TAG}-${TIMESTAMP}  
+  docker push ${FORMITI_DEV_ACCOUNT}.dkr.ecr.eu-west-2.amazonaws.com/pontus-track-graphdb-odb-lambda:${TAG}-${TIMESTAMP}
 
 fi
 

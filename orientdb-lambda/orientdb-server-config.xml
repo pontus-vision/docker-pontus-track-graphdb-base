@@ -142,6 +142,8 @@
         <!-- DATABASE POOL: size min/max -->
         <entry name="db.pool.min" value="1"/>
         <entry name="db.pool.max" value="50"/>
+        <entry name="server.database.path" value="/mnt/orientdb/databases" />
+
 
         <!-- PROFILER: configures the profiler as <seconds-for-snapshot>,<archive-snapshot-size>,<summary-size> -->
         <entry name="profiler.enabled" value="false"/>
