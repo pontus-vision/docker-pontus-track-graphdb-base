@@ -28,18 +28,36 @@ RUN mkdir /orientdb && \
   && echo "$ORIENTDB_DOWNLOAD_SHA1 *orientdb-tp3-$ORIENTDB_VERSION.tar.gz" | sha1sum -c - \
   && tar -xvzf orientdb-tp3-$ORIENTDB_VERSION.tar.gz -C /orientdb --strip-components=1 \
   && rm orientdb-tp3-$ORIENTDB_VERSION.tar.gz \
-  && rm -rf /orientdb/databases/*
+  && rm -rf /orientdb/databases/* 
 
-FROM openjdk:8-jdk-slim-buster
+#FROM openjdk:8-jdk-slim-buster
+FROM public.ecr.aws/lambda/java:8 as FINAL
+
+ARG LAMBDA_TASK_ROOT=/var/task
+ENV LAMBDA_TASK_ROOT=${LAMBDA_TASK_ROOT}
+
+# Copy function code and runtime dependencies from Gradle layout
+
+#COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-lib:1.13.2 /root/.m2/repository/pv-gdpr/pontus-odb-graph/2.0.0/pontus-odb-graph-2.0.0.jar  ${LAMBDA_TASK_ROOT}/lib/
+
+ENV ORIENTDB_HOME=/orientdb/
+
+COPY --chown=1000:1000 --from=BUILDER /orientdb/plugins/*  ${LAMBDA_TASK_ROOT}/lib/
 
 
-RUN apt update -y && \
-    apt install -y tar curl bash gettext-base && \
-    apt autoremove -y && \
-    groupadd --system -g 1000 orientdb && \
-    useradd -u 1000 -g orientdb orientdb -d /orientdb && \
-    mkdir /orientdb /orientdb/bin /orientdb/lib /orientdb/log /orientdb/databases && \
-    chown -R 1000:1000 /orientdb
+
+
+#RUN apt update -y && \
+    #apt install -y tar curl bash s3fs && \
+    #apt autoremove -y && \
+    #groupadd --system -g 1000 orientdb && \
+    #useradd -u 1000 -g orientdb orientdb -d /orientdb && \
+    #chown -R 1000:1000 /orientdb
+
+#    sed -i 's/#user_allow_other/user_allow_other/g' /etc/fuse.conf && \
+#    mkdir /orientdb /orientdb/bin /orientdb/lib /orientdb/log /orientdb/databases && \
+#    echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY | sed -e 's/ //g' > /orientdb/.passwd-s3fs && \
+#    chmod 400 /orientdb/.passwd-s3fs && \
 
 USER 1000
 
@@ -48,18 +66,33 @@ COPY --chown=1000:1000   --from=BUILDER /orientdb/bin/*     /orientdb/bin/
 COPY --chown=1000:1000   --from=BUILDER /orientdb/config/*     /orientdb/config/
 COPY --chown=1000:1000   --from=BUILDER /orientdb/plugins/*     /orientdb/plugins/
 
+
+USER root
+RUN mkdir /orientdb/backup && \
+    mkdir /orientdb/databases && \
+    mkdir -p /mnt/orientdb && \
+    chown 1000:1000 /orientdb/backup && \
+    chown 1000:1000 /orientdb/databases  && \
+    chown 1000:1000 /mnt/orientdb && \
+    ln -s /mnt/orientdb /orientdb/databases && \
+    chmod 777 /orientdb/databases  && \
+    chmod 777 /mnt/orientdb && \
+    chmod 777 /orientdb/backup
+
+VOLUME ["/mnt/orientdb"]
+
+USER 1000
+
 #overrides internal gremlin-server to set binding to 0.0.0.0 instead of localhost
 COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-jpostal-lib:1.13.2 /pontus-jpostal-datadir /opt/pontus-graphdb/graphdb-current/datadir
 
 COPY --chown=1000:1000 server.sh /orientdb/bin
 RUN chmod 755 /orientdb/bin/server.sh
 
-COPY --chown=1000:1000  demodb.properties.template gremlin-server.yaml security.json /orientdb/config/
+COPY --chown=1000:1000  demodb.properties gremlin-server.yaml security.json /orientdb/config/
 
 COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-lib:1.13.2 /root/.m2/repository/pv-gdpr/pontus-odb-graph/2.0.0/pontus-odb-graph-2.0.0.jar /orientdb/lib/
-
-COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-conf:1.13.2 /pontus-odb-graph/conf /orientdb/conf
-COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-conf:1.13.2 /pontus-odb-graph/j2 /orientdb/j2
+COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-lib:1.13.2    /pontus-odb-graph/ ${LAMBDA_TASK_ROOT}/
 
 RUN ln -s /tmp/libpostal.so /tmp/libpostal.so.1 || true && \
     ln -s /tmp/libjpostal_parser.so  /tmp/libjpostal_parser.so.1 || true
@@ -67,21 +100,13 @@ RUN ln -s /tmp/libpostal.so /tmp/libpostal.so.1 || true && \
 ENV PATH /orientdb/bin:$PATH
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tmp
 
-VOLUME ["/orientdb/backup", "/orientdb/databases"]
+COPY --chown=1000:1000  orientdb-server-config.xml /orientdb/config/
 
-WORKDIR /orientdb
-
-#OrientDb binary
-EXPOSE 2424
-
-#OrientDb http
-EXPOSE 2480
-
-#Gremlin server
-EXPOSE 8182
+COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-conf:1.13.2 /pontus-odb-graph/conf /orientdb/conf
+COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-conf:1.13.2 /pontus-odb-graph/j2 /orientdb/j2
 
 
-USER 1000
-# Default command start the server
-CMD ["/orientdb/bin/server.sh"]
+
+# Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
+CMD [ "com.pontusvision.gdpr.LambdaHandler::handleRequest" ]
 
