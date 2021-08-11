@@ -54,12 +54,6 @@ COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-jpostal-lib:1.13.2 /pontus
 COPY --chown=1000:1000 server.sh /orientdb/bin
 RUN chmod 755 /orientdb/bin/server.sh
 
-COPY --chown=1000:1000  demodb.properties.template gremlin-server.yaml security.json /orientdb/config/
-
-COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-lib:1.13.2 /root/.m2/repository/pv-gdpr/pontus-odb-graph/2.0.0/pontus-odb-graph-2.0.0.jar /orientdb/lib/
-
-COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-conf:1.13.2 /pontus-odb-graph/conf /orientdb/conf
-COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-conf:1.13.2 /pontus-odb-graph/j2 /orientdb/j2
 
 RUN ln -s /tmp/libpostal.so /tmp/libpostal.so.1 || true && \
     ln -s /tmp/libjpostal_parser.so  /tmp/libjpostal_parser.so.1 || true
@@ -67,6 +61,13 @@ RUN ln -s /tmp/libpostal.so /tmp/libpostal.so.1 || true && \
 ENV PATH /orientdb/bin:$PATH
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tmp
 
+
+COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-lib:1.13.2 /root/.m2/repository/pv-gdpr/pontus-odb-graph/2.0.0/pontus-odb-graph-2.0.0.jar /orientdb/lib/
+
+COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-conf:1.13.2 /pontus-odb-graph/conf/ /orientdb/conf/
+COPY --chown=1000:1000  demodb.properties.template gremlin-server.yaml security.json /orientdb/config/
+COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-conf:1.13.2 /pontus-odb-graph/config/* /orientdb/config/
+COPY --chown=1000:1000 --from=pontusvisiongdpr/pontus-graphdb-odb-conf:1.13.2 /pontus-odb-graph/j2 /orientdb/j2
 VOLUME ["/orientdb/backup", "/orientdb/databases"]
 
 WORKDIR /orientdb
